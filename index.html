@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+	  <h1>Melbourne Journey: an extensive map for newcomers</h1>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/Tramtracks_1.js"></script>
+        <script src="data/Openspaces_2.js"></script>
+        <script src="data/Selfguidedwalks_3.js"></script>
+        <script src="data/CityCircleTramRoute_4.js"></script>
+        <script src="data/CityCircleTramStops_5.js"></script>
+        <script src="data/Streetfurniture_6.js"></script>
+        <script src="data/Taxiranks_7.js"></script>
+        <script src="data/Busstops_8.js"></script>
+        <script src="data/Culturalworks_9.js"></script>
+        <script src="data/Coffeerestaurantsandaccommodation_10.js"></script>
+        <script src="data/Placesofinterest_11.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+ map.createPane('pane_ESRITopo_0');
+        map.getPane('pane_ESRITopo_0').style.zIndex = 400;
+        var layer_ESRITopo_0 = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRITopo_0',
+            opacity: 0.5,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRITopo_0;
+        map.addLayer(layer_ESRITopo_0);
+        function pop_Tramtracks_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Tramtracks_1_0() {
+            return {
+                pane: 'pane_Tramtracks_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Tramtracks_1');
+        map.getPane('pane_Tramtracks_1').style.zIndex = 401;
+        map.getPane('pane_Tramtracks_1').style['mix-blend-mode'] = 'normal';
+        var layer_Tramtracks_1 = new L.geoJson(json_Tramtracks_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Tramtracks_1',
+            layerName: 'layer_Tramtracks_1',
+            pane: 'pane_Tramtracks_1',
+            onEachFeature: pop_Tramtracks_1,
+            style: style_Tramtracks_1_0,
+        });
+        bounds_group.addLayer(layer_Tramtracks_1);
+        map.addLayer(layer_Tramtracks_1);
+        function pop_Openspaces_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['park_name'] !== null ? autolinker.link(feature.properties['park_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Openspaces_2_0() {
+            return {
+                pane: 'pane_Openspaces_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.3)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,0.3)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Openspaces_2');
+        map.getPane('pane_Openspaces_2').style.zIndex = 402;
+        map.getPane('pane_Openspaces_2').style['mix-blend-mode'] = 'normal';
+        var layer_Openspaces_2 = new L.geoJson(json_Openspaces_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Openspaces_2',
+            layerName: 'layer_Openspaces_2',
+            pane: 'pane_Openspaces_2',
+            onEachFeature: pop_Openspaces_2,
+            style: style_Openspaces_2_0,
+        });
+        bounds_group.addLayer(layer_Openspaces_2);
+        map.addLayer(layer_Openspaces_2);
+        function pop_Selfguidedwalks_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Distance: </b>' + (feature.properties['distance'] !== null ? autolinker.link(feature.properties['distance'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Time: </b>' + (feature.properties['time'] !== null ? autolinker.link(feature.properties['time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Selfguidedwalks_3_0(feature) {
+            switch(String(feature.properties['name'])) {
+                case 'A Walk in the Park':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(67,92,255,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Arcades & Lanes':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(44,217,220,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Elegant Enclave':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(203,145,207,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Melbourne Music Walk':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(134,19,187,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'On the Waterfront':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(255,127,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Secret Gardens':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(170,217,89,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Sports & Entertainment':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(7,227,99,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'The Cosmopolitan':
+                    return {
+                pane: 'pane_Selfguidedwalks_3',
+                opacity: 1,
+                color: 'rgba(241,19,208,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Selfguidedwalks_3');
+        map.getPane('pane_Selfguidedwalks_3').style.zIndex = 403;
+        map.getPane('pane_Selfguidedwalks_3').style['mix-blend-mode'] = 'normal';
+        var layer_Selfguidedwalks_3 = new L.geoJson(json_Selfguidedwalks_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Selfguidedwalks_3',
+            layerName: 'layer_Selfguidedwalks_3',
+            pane: 'pane_Selfguidedwalks_3',
+            onEachFeature: pop_Selfguidedwalks_3,
+            style: style_Selfguidedwalks_3_0,
+        });
+        bounds_group.addLayer(layer_Selfguidedwalks_3);
+        map.addLayer(layer_Selfguidedwalks_3);
+        function pop_CityCircleTramRoute_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Route No.: </b>' + (feature.properties['route_no'] !== null ? autolinker.link(feature.properties['route_no'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                   <tr>\
+                        <td colspan="2"><n>This free transport is incredibly useful to the many families who visit Melbourne every year; running daily along the city CBD circuit that covers all major Melbourne attractions. Passengers are welcome to hop on and off at any of the stops along the route, and visitors will also be happy to know that the tram also has free commentary in English. The pre-recorded commentary will give you an overview of the historic landmarks and their significance to the city of Melbourne. </n>' + (feature.properties['mccid_str'] !== null ? autolinker.link(feature.properties['mccid_str'].toLocaleString()) : '') + ' </td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CityCircleTramRoute_4_0() {
+            return {
+                pane: 'pane_CityCircleTramRoute_4',
+                opacity: 1,
+                color: 'rgba(243,12,8,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CityCircleTramRoute_4');
+        map.getPane('pane_CityCircleTramRoute_4').style.zIndex = 404;
+        map.getPane('pane_CityCircleTramRoute_4').style['mix-blend-mode'] = 'normal';
+        var layer_CityCircleTramRoute_4 = new L.geoJson(json_CityCircleTramRoute_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CityCircleTramRoute_4',
+            layerName: 'layer_CityCircleTramRoute_4',
+            pane: 'pane_CityCircleTramRoute_4',
+            onEachFeature: pop_CityCircleTramRoute_4,
+            style: style_CityCircleTramRoute_4_0,
+        });
+        bounds_group.addLayer(layer_CityCircleTramRoute_4);
+        map.addLayer(layer_CityCircleTramRoute_4);
+        function pop_CityCircleTramStops_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name of the tram stop: </b>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CityCircleTramStops_5_0() {
+            return {
+                pane: 'pane_CityCircleTramStops_5',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,12,8,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CityCircleTramStops_5');
+        map.getPane('pane_CityCircleTramStops_5').style.zIndex = 405;
+        map.getPane('pane_CityCircleTramStops_5').style['mix-blend-mode'] = 'normal';
+        var layer_CityCircleTramStops_5 = new L.geoJson(json_CityCircleTramStops_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CityCircleTramStops_5',
+            layerName: 'layer_CityCircleTramStops_5',
+            pane: 'pane_CityCircleTramStops_5',
+            onEachFeature: pop_CityCircleTramStops_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_CityCircleTramStops_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CityCircleTramStops_5);
+        map.addLayer(layer_CityCircleTramStops_5);
+        function pop_Streetfurniture_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Type: </b>' + (feature.properties['asset_type'] !== null ? autolinker.link(feature.properties['asset_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Streetfurniture_6_0(feature) {
+            switch(String(feature.properties['asset_type'])) {
+                case 'Barbeque':
+                    return {
+                pane: 'pane_Streetfurniture_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,107,95,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Drinking Fountain':
+                    return {
+                pane: 'pane_Streetfurniture_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,107,95,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Hoop':
+                    return {
+                pane: 'pane_Streetfurniture_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,107,95,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Information Pillar':
+                    return {
+                pane: 'pane_Streetfurniture_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,107,95,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Picnic Setting':
+                    return {
+                pane: 'pane_Streetfurniture_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,107,95,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Streetfurniture_6');
+        map.getPane('pane_Streetfurniture_6').style.zIndex = 406;
+        map.getPane('pane_Streetfurniture_6').style['mix-blend-mode'] = 'normal';
+        var layer_Streetfurniture_6 = new L.geoJson(json_Streetfurniture_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Streetfurniture_6',
+            layerName: 'layer_Streetfurniture_6',
+            pane: 'pane_Streetfurniture_6',
+            onEachFeature: pop_Streetfurniture_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Streetfurniture_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Streetfurniture_6);
+        map.addLayer(layer_Streetfurniture_6);
+        function pop_Taxiranks_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Night Availability: </b>' + (feature.properties['night_only'] !== null ? autolinker.link(feature.properties['night_only'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Described location: </b>' + (feature.properties['loc_desc'] !== null ? autolinker.link(feature.properties['loc_desc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Taxiranks_7_0() {
+            return {
+                pane: 'pane_Taxiranks_7',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,228,30,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Taxiranks_7');
+        map.getPane('pane_Taxiranks_7').style.zIndex = 407;
+        map.getPane('pane_Taxiranks_7').style['mix-blend-mode'] = 'normal';
+        var layer_Taxiranks_7 = new L.geoJson(json_Taxiranks_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Taxiranks_7',
+            layerName: 'layer_Taxiranks_7',
+            pane: 'pane_Taxiranks_7',
+            onEachFeature: pop_Taxiranks_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Taxiranks_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Taxiranks_7);
+        map.addLayer(layer_Taxiranks_7);
+        function pop_Busstops_8(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['prop_id'] !== null ? autolinker.link(feature.properties['prop_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['addresspt1'] !== null ? autolinker.link(feature.properties['addresspt1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['addressp_1'] !== null ? autolinker.link(feature.properties['addressp_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['asset_clas'] !== null ? autolinker.link(feature.properties['asset_clas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['asset_type'] !== null ? autolinker.link(feature.properties['asset_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(feature.properties['objectid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['str_id'] !== null ? autolinker.link(feature.properties['str_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['addresspt'] !== null ? autolinker.link(feature.properties['addresspt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['asset_subt'] !== null ? autolinker.link(feature.properties['asset_subt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['model_desc'] !== null ? autolinker.link(feature.properties['model_desc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['mcc_id'] !== null ? autolinker.link(feature.properties['mcc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['roadseg_id'] !== null ? autolinker.link(feature.properties['roadseg_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['model_no'] !== null ? autolinker.link(feature.properties['model_no'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Busstops_8_0() {
+            return {
+                pane: 'pane_Busstops_8',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Busstops_8');
+        map.getPane('pane_Busstops_8').style.zIndex = 408;
+        map.getPane('pane_Busstops_8').style['mix-blend-mode'] = 'normal';
+        var layer_Busstops_8 = new L.geoJson(json_Busstops_8, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Busstops_8',
+            layerName: 'layer_Busstops_8',
+            pane: 'pane_Busstops_8',
+            onEachFeature: pop_Busstops_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Busstops_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Busstops_8);
+        map.addLayer(layer_Busstops_8);
+        function pop_Culturalworks_9(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Type: </b>' + (feature.properties['asset_type'] !== null ? autolinker.link(feature.properties['asset_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Artist: </b>' + (feature.properties['artist'] !== null ? autolinker.link(feature.properties['artist'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Date: </b>' + (feature.properties['art_date'] !== null ? autolinker.link(feature.properties['art_date'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Description: </b>' + (feature.properties['desc'] !== null ? autolinker.link(feature.properties['desc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 5000} + {maxWidth: 5000});
+        }
+
+        function style_Culturalworks_9_0(feature) {
+            switch(String(feature.properties['asset_type'])) {
+                case 'Art':
+                    return {
+                pane: 'pane_Culturalworks_9',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(141,34,228,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Fountain':
+                    return {
+                pane: 'pane_Culturalworks_9',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(141,34,228,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Monument':
+                    return {
+                pane: 'pane_Culturalworks_9',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(141,34,228,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Culturalworks_9');
+        map.getPane('pane_Culturalworks_9').style.zIndex = 409;
+        map.getPane('pane_Culturalworks_9').style['mix-blend-mode'] = 'normal';
+        var layer_Culturalworks_9 = new L.geoJson(json_Culturalworks_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Culturalworks_9',
+            layerName: 'layer_Culturalworks_9',
+            pane: 'pane_Culturalworks_9',
+            onEachFeature: pop_Culturalworks_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Culturalworks_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Culturalworks_9);
+        map.addLayer(layer_Culturalworks_9);
+        function pop_Coffeerestaurantsandaccommodation_10(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['trading_na'] !== null ? autolinker.link(feature.properties['trading_na'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Type: </b>' + (feature.properties['industry_1'] !== null ? autolinker.link(feature.properties['industry_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>No. Seats: </b>' + (feature.properties['number_of_'] !== null ? autolinker.link(feature.properties['number_of_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Coffeerestaurantsandaccommodation_10_0(feature) {
+            switch(String(feature.properties['industry_1'])) {
+                case 'Accommodation':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,72,167,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Bakery':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Cafes and Restaurants':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Clubs':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Pubs, Taverns and Bars':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Takeaway Food Services':
+                    return {
+                pane: 'pane_Coffeerestaurantsandaccommodation_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Coffeerestaurantsandaccommodation_10');
+        map.getPane('pane_Coffeerestaurantsandaccommodation_10').style.zIndex = 410;
+        map.getPane('pane_Coffeerestaurantsandaccommodation_10').style['mix-blend-mode'] = 'normal';
+        var layer_Coffeerestaurantsandaccommodation_10 = new L.geoJson(json_Coffeerestaurantsandaccommodation_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Coffeerestaurantsandaccommodation_10',
+            layerName: 'layer_Coffeerestaurantsandaccommodation_10',
+            pane: 'pane_Coffeerestaurantsandaccommodation_10',
+            onEachFeature: pop_Coffeerestaurantsandaccommodation_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Coffeerestaurantsandaccommodation_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Coffeerestaurantsandaccommodation_10);
+        map.addLayer(layer_Coffeerestaurantsandaccommodation_10);
+        function pop_Placesofinterest_11(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><b>Theme: </b>' + (feature.properties['theme'] !== null ? autolinker.link(feature.properties['theme'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><b>Name: </b>' + (feature.properties['feature_na'] !== null ? autolinker.link(feature.properties['feature_na'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Placesofinterest_11_0(feature) {
+            switch(String(feature.properties['theme'])) {
+                case 'Community Use':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Education Centre':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Entertainment':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Health Services':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Office':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Place of Worship':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Stores':
+                    return {
+                pane: 'pane_Placesofinterest_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Placesofinterest_11');
+        map.getPane('pane_Placesofinterest_11').style.zIndex = 411;
+        map.getPane('pane_Placesofinterest_11').style['mix-blend-mode'] = 'normal';
+        var layer_Placesofinterest_11 = new L.geoJson(json_Placesofinterest_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Placesofinterest_11',
+            layerName: 'layer_Placesofinterest_11',
+            pane: 'pane_Placesofinterest_11',
+            onEachFeature: pop_Placesofinterest_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Placesofinterest_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Placesofinterest_11);
+        map.addLayer(layer_Placesofinterest_11);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Places of interest<br /><table><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_CommunityUse0.png" /></td><td>Community Use</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_EducationCentre1.png" /></td><td>Education Centre</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_Entertainment2.png" /></td><td>Entertainment</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_HealthServices3.png" /></td><td>Health Services</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_Office4.png" /></td><td>Office</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_PlaceofWorship5.png" /></td><td>Place of Worship</td></tr><tr><td style="text-align: center;"><img src="legend/Placesofinterest_11_Stores6.png" /></td><td>Stores</td></tr></table>': layer_Placesofinterest_11,'Coffee, restaurants and accommodation<br /><table><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_Accommodation0.png" /></td><td>Accommodation</td></tr><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_Bakery1.png" /></td><td>Bakery</td></tr><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_CafesandRestaurants2.png" /></td><td>Cafes and Restaurants</td></tr><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_Clubs3.png" /></td><td>Clubs</td></tr><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_PubsTavernsandBars4.png" /></td><td>Pubs, Taverns and Bars</td></tr><tr><td style="text-align: center;"><img src="legend/Coffeerestaurantsandaccommodation_10_TakeawayFoodServices5.png" /></td><td>Takeaway Food Services</td></tr></table>': layer_Coffeerestaurantsandaccommodation_10,'Cultural works<br /><table><tr><td style="text-align: center;"><img src="legend/Culturalworks_9_Art0.png" /></td><td>Art</td></tr><tr><td style="text-align: center;"><img src="legend/Culturalworks_9_Fountain1.png" /></td><td>Fountain</td></tr><tr><td style="text-align: center;"><img src="legend/Culturalworks_9_Monument2.png" /></td><td>Monument</td></tr></table>': layer_Culturalworks_9,'<img src="legend/Busstops_8.png" /> Bus stops': layer_Busstops_8,'<img src="legend/Taxiranks_7.png" /> Taxi ranks': layer_Taxiranks_7,'Street furniture<br /><table><tr><td style="text-align: center;"><img src="legend/Streetfurniture_6_Barbeque0.png" /></td><td>Barbeque</td></tr><tr><td style="text-align: center;"><img src="legend/Streetfurniture_6_DrinkingFountain1.png" /></td><td>Drinking Fountain</td></tr><tr><td style="text-align: center;"><img src="legend/Streetfurniture_6_Hoop2.png" /></td><td>Hoop</td></tr><tr><td style="text-align: center;"><img src="legend/Streetfurniture_6_InformationPillar3.png" /></td><td>Information Pillar</td></tr><tr><td style="text-align: center;"><img src="legend/Streetfurniture_6_PicnicSetting4.png" /></td><td>Picnic Setting</td></tr></table>': layer_Streetfurniture_6,'<img src="legend/CityCircleTramStops_5.png" /> City Circle Tram Stops': layer_CityCircleTramStops_5,'<img src="legend/CityCircleTramRoute_4.png" /> City Circle Tram Route': layer_CityCircleTramRoute_4,'Self-guided walks<br /><table><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_AWalkinthePark0.png" /></td><td>A Walk in the Park</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_ArcadesLanes1.png" /></td><td>Arcades & Lanes</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_ElegantEnclave2.png" /></td><td>Elegant Enclave</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_MelbourneMusicWalk3.png" /></td><td>Melbourne Music Walk</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_OntheWaterfront4.png" /></td><td>On the Waterfront</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_SecretGardens5.png" /></td><td>Secret Gardens</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_SportsEntertainment6.png" /></td><td>Sports & Entertainment</td></tr><tr><td style="text-align: center;"><img src="legend/Selfguidedwalks_3_TheCosmopolitan7.png" /></td><td>The Cosmopolitan</td></tr></table>': layer_Selfguidedwalks_3,'<img src="legend/Openspaces_2.png" /> Open spaces': layer_Openspaces_2,'<img src="legend/Tramtracks_1.png" /> Tram tracks': layer_Tramtracks_1,"ESRI Topo": layer_ESRITopo_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+	<h4>Acknowledgment</h4>
+		<p>Please feel free to comment on my work.</p>
+		<p>&nbsp;</p>
+		<p><a href="http://creativecommons.org/licenses/by/4.0/"> <img style="border-width:0;"
+src="http://i.creativecommons.org/l/by/4.0/88x31.png" alt="Creative Commos License" /> </a> <br />This work by Laura Hita is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+</html>
